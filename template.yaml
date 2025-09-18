@@ -18,74 +18,6 @@ spec:
     - title: Project Stack Selection
       required:
         - domain
-        - frontend
-        - backend
-        - database
-
-      allOf:
-        - if:
-            properties:
-              domain:
-                const: Banking
-          then:
-            properties:
-              frontend:
-                enum: [Vue.js, Next.js, Typescript]
-              backend:
-                enum: [Java, Python, Ruby]
-              database:
-                enum: [MYSQL, PostgreSQL]
-
-        - if:
-            properties:
-              domain:
-                const: Insurance
-          then:
-            properties:
-              frontend:
-                enum: [React, Angular]
-              backend:
-                enum: [Scala, Go, Django]
-              database:
-                enum: [MYSQL, PostgreSQL]
-
-        - if:
-            properties:
-              domain:
-                const: HealthCare
-          then:
-            properties:
-              frontend:
-                enum: [Three.js, ReactJs, Angular 2+]
-              backend:
-                enum: [Springboot, ASP.NET]
-              database:
-                enum: [MYSQL, PostgreSQL]
-
-        - if:
-            properties:
-              domain:
-                const: Education
-          then:
-            properties:
-              frontend:
-                enum: [Vue.js, Next.js, Typescript, Three.js, ReactJs, Angular 2+]
-              backend:
-                enum:
-                  - Java
-                  - Python
-                  - Ruby
-                  - PHP Kotlin
-                  - C sharp
-                  - Perl
-                  - Scala
-                  - Go
-                  - Djangi
-                  - Springboot
-                  - ASP.NET
-              database:
-                enum: [MYSQL, PostgreSQL]
-
       properties:
         domain:
           title: Select a Domain
@@ -96,29 +28,135 @@ spec:
             - HealthCare
             - Education
 
-        frontend:
-          title: UI Framework
-          type: string
-          enum: []  # Placeholder so dropdown renders
+      dependencies:
+        domain:
+          oneOf:
+            - properties:
+                domain:
+                  const: Banking
+                frontend:
+                  title: UI Framework
+                  type: string
+                  enum: [Vue.js, Next.js, Typescript]
+                backend:
+                  title: Backend Platform
+                  type: string
+                  enum: [Java, Python, Ruby]
+                database:
+                  title: Database
+                  type: string
+                  enum: [MYSQL, PostgreSQL]
+                repoUrl:
+                  title: Repository Location
+                  type: string
+                  ui:field: RepoUrlPicker
+                  ui:options:
+                    allowedHosts:
+                      - github.com
+                      - github.kyndryl.net
+              required:
+                - frontend
+                - backend
+                - database
+                - repoUrl
 
-        backend:
-          title: Backend Platform
-          type: string
-          enum: []  # Placeholder so dropdown renders
+            - properties:
+                domain:
+                  const: Insurance
+                frontend:
+                  title: UI Framework
+                  type: string
+                  enum: [React, Angular]
+                backend:
+                  title: Backend Platform
+                  type: string
+                  enum: [Scala, Go, Django]
+                database:
+                  title: Database
+                  type: string
+                  enum: [MYSQL, PostgreSQL]
+                repoUrl:
+                  title: Repository Location
+                  type: string
+                  ui:field: RepoUrlPicker
+                  ui:options:
+                    allowedHosts:
+                      - github.com
+                      - github.kyndryl.net
+              required:
+                - frontend
+                - backend
+                - database
+                - repoUrl
 
-        database:
-          title: Database
-          type: string
-          enum: []  # Placeholder so dropdown renders
+            - properties:
+                domain:
+                  const: HealthCare
+                frontend:
+                  title: UI Framework
+                  type: string
+                  enum: [Three.js, ReactJs, Angular 2+]
+                backend:
+                  title: Backend Platform
+                  type: string
+                  enum: [Springboot, ASP.NET]
+                database:
+                  title: Database
+                  type: string
+                  enum: [MYSQL, PostgreSQL]
+                repoUrl:
+                  title: Repository Location
+                  type: string
+                  ui:field: RepoUrlPicker
+                  ui:options:
+                    allowedHosts:
+                      - github.com
+                      - github.kyndryl.net
+              required:
+                - frontend
+                - backend
+                - database
+                - repoUrl
 
-        repoUrl:
-          title: Repository Location
-          type: string
-          ui:field: RepoUrlPicker
-          ui:options:
-            allowedHosts:
-              - github.com
-              - github.kyndryl.net
+            - properties:
+                domain:
+                  const: Education
+                frontend:
+                  title: UI Framework
+                  type: string
+                  enum: [Vue.js, Next.js, Typescript, Three.js, ReactJs, Angular 2+]
+                backend:
+                  title: Backend Platform
+                  type: string
+                  enum:
+                    - Java
+                    - Python
+                    - Ruby
+                    - PHP Kotlin
+                    - C sharp
+                    - Perl
+                    - Scala
+                    - Go
+                    - Djangi
+                    - Springboot
+                    - ASP.NET
+                database:
+                  title: Database
+                  type: string
+                  enum: [MYSQL, PostgreSQL]
+                repoUrl:
+                  title: Repository Location
+                  type: string
+                  ui:field: RepoUrlPicker
+                  ui:options:
+                    allowedHosts:
+                      - github.com
+                      - github.kyndryl.net
+              required:
+                - frontend
+                - backend
+                - database
+                - repoUrl
 
   steps:
     - id: fetch
