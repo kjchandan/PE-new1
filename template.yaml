@@ -11,7 +11,7 @@ metadata:
     - database
 
 spec:
-  owner: user:your-username
+  owner: user:kjchandan
   type: service
 
   parameters:
