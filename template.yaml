@@ -1,60 +1,141 @@
-parameters:
-  - title: Project Stack Selection
-    allOf:
-      - if:
-          properties:
-            domain:
-              const: Banking
-        then:
-          properties:
-            frontend:
-              enum: [Vue.js, Next.js, Typescript]
-            backend:
-              enum: [Java, Python, Ruby]
-            database:
-              enum: [MYSQL, PostgreSQL]
-      - if:
-          properties:
-            domain:
-              const: Insurance
-        then:
-          properties:
-            frontend:
-              enum: [React, Angular]
-            backend:
-              enum: [Scala, Go, Django]
-            database:
-              enum: [MYSQL, PostgreSQL]
-      - if:
-          properties:
-            domain:
-              const: HealthCare
-        then:
-          properties:
-            frontend:
-              enum: [Three.js, ReactJs, Angular 2+]
-            backend:
-              enum: [Springboot, ASP.NET]
-            database:
-              enum: [MYSQL, PostgreSQL]
-      - if:
-          properties:
-            domain:
-              const: Education
-        then:
-          properties:
-            frontend:
-              enum: [Vue.js, Next.js, Typescript, Three.js, ReactJs, Angular 2+]
-            backend:
-              enum: [Java, Python, Ruby, PHP Kotlin, C sharp, Perl, Scala, Go, Djangi, Springboot, ASP.NET]
-            database:
-              enum: [MYSQL, PostgreSQL]
-    properties:
-      domain:
-        title: Select a Domain
-        type: string
-        enum:
-          - Insurance
-          - Banking
-          - HealthCare
-          - Education
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: project-generator-config
+  title: Project Generator Configuration
+  description: Select domain, frontend, backend, and database to generate a project scaffold
+  tags:
+    - generator
+    - frontend
+    - backend
+    - database
+spec:
+  owner: user:your-username
+  type: service
+
+  parameters:
+    - title: Project Stack Selection
+      allOf:
+        - if:
+            properties:
+              domain:
+                const: Banking
+          then:
+            properties:
+              frontend:
+                enum: [Vue.js, Next.js, Typescript]
+              backend:
+                enum: [Java, Python, Ruby]
+              database:
+                enum: [MYSQL, PostgreSQL]
+
+        - if:
+            properties:
+              domain:
+                const: Insurance
+          then:
+            properties:
+              frontend:
+                enum: [React, Angular]
+              backend:
+                enum: [Scala, Go, Django]
+              database:
+                enum: [MYSQL, PostgreSQL]
+
+        - if:
+            properties:
+              domain:
+                const: HealthCare
+          then:
+            properties:
+              frontend:
+                enum: [Three.js, ReactJs, Angular 2+]
+              backend:
+                enum: [Springboot, ASP.NET]
+              database:
+                enum: [MYSQL, PostgreSQL]
+
+        - if:
+            properties:
+              domain:
+                const: Education
+          then:
+            properties:
+              frontend:
+                enum: [Vue.js, Next.js, Typescript, Three.js, ReactJs, Angular 2+]
+              backend:
+                enum: [Java, Python, Ruby, PHP Kotlin, C sharp, Perl, Scala, Go, Djangi, Springboot, ASP.NET]
+              database:
+                enum: [MYSQL, PostgreSQL]
+
+      properties:
+        domain:
+          title: Select a Domain
+          type: string
+          enum:
+            - Banking
+            - Insurance
+            - HealthCare
+            - Education
+
+        frontend:
+          title: UI Framework
+          type: string
+
+        backend:
+          title: Backend Platform
+          type: string
+
+        database:
+          title: Database
+          type: string
+
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+              - github.kyndryl.net
+
+  steps:
+    - id: fetch
+      name: Fetch Skeleton
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          domain: ${{ parameters.domain }}
+          frontend: ${{ parameters.frontend }}
+          backend: ${{ parameters.backend }}
+          database: ${{ parameters.database }}
+          repoUrl: ${{ parameters.repoUrl }}
+
+    - id: publish
+      name: Publish to GitHub
+      action: publish:github
+      input:
+        description: Generated project for ${{ parameters.domain }} with ${{ parameters.frontend }} frontend and ${{ parameters.backend }} backend.
+        repoUrl: ${{ parameters.repoUrl }}
+
+    - id: register
+      name: Register in Catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in VSCode
+        url: https://vscode.dev/github/${{ parameters.repoUrl | parseRepoUrl | pick('owner') }}/${{ parameters.repoUrl | parseRepoUrl | pick('repo') }}
+      - title: Open in Replit
+        url: https://replit.com/github/${{ parameters.repoUrl | parseRepoUrl | pick('owner') }}/${{ parameters.repoUrl | parseRepoUrl | pick('repo') }}
+      - title: Open in AI Studio
+        url: https://aistudio.example.com/project/${{ parameters.repoUrl | parseRepoUrl | pick('owner') }}/${{ parameters.repoUrl | parseRepoUrl | pick('repo') }}
+      - title: Open in Catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
