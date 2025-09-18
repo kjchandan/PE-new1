@@ -1,0 +1,60 @@
+parameters:
+  - title: Project Stack Selection
+    allOf:
+      - if:
+          properties:
+            domain:
+              const: Banking
+        then:
+          properties:
+            frontend:
+              enum: [Vue.js, Next.js, Typescript]
+            backend:
+              enum: [Java, Python, Ruby]
+            database:
+              enum: [MYSQL, PostgreSQL]
+      - if:
+          properties:
+            domain:
+              const: Insurance
+        then:
+          properties:
+            frontend:
+              enum: [React, Angular]
+            backend:
+              enum: [Scala, Go, Django]
+            database:
+              enum: [MYSQL, PostgreSQL]
+      - if:
+          properties:
+            domain:
+              const: HealthCare
+        then:
+          properties:
+            frontend:
+              enum: [Three.js, ReactJs, Angular 2+]
+            backend:
+              enum: [Springboot, ASP.NET]
+            database:
+              enum: [MYSQL, PostgreSQL]
+      - if:
+          properties:
+            domain:
+              const: Education
+        then:
+          properties:
+            frontend:
+              enum: [Vue.js, Next.js, Typescript, Three.js, ReactJs, Angular 2+]
+            backend:
+              enum: [Java, Python, Ruby, PHP Kotlin, C sharp, Perl, Scala, Go, Djangi, Springboot, ASP.NET]
+            database:
+              enum: [MYSQL, PostgreSQL]
+    properties:
+      domain:
+        title: Select a Domain
+        type: string
+        enum:
+          - Insurance
+          - Banking
+          - HealthCare
+          - Education
