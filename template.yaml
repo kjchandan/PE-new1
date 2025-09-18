@@ -1,20 +1,27 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: project-generator-config
-  title: Project Generator Configuration
+  name: domain-based-stack-generator
+  title: Domain-Based Stack Generator
   description: Select domain, frontend, backend, and database to generate a project scaffold
   tags:
     - generator
     - frontend
     - backend
     - database
+
 spec:
   owner: user:your-username
   type: service
 
   parameters:
     - title: Project Stack Selection
+      required:
+        - domain
+        - frontend
+        - backend
+        - database
+
       allOf:
         - if:
             properties:
@@ -64,7 +71,18 @@ spec:
               frontend:
                 enum: [Vue.js, Next.js, Typescript, Three.js, ReactJs, Angular 2+]
               backend:
-                enum: [Java, Python, Ruby, PHP Kotlin, C sharp, Perl, Scala, Go, Djangi, Springboot, ASP.NET]
+                enum:
+                  - Java
+                  - Python
+                  - Ruby
+                  - PHP Kotlin
+                  - C sharp
+                  - Perl
+                  - Scala
+                  - Go
+                  - Djangi
+                  - Springboot
+                  - ASP.NET
               database:
                 enum: [MYSQL, PostgreSQL]
 
@@ -81,14 +99,17 @@ spec:
         frontend:
           title: UI Framework
           type: string
+          enum: []  # Placeholder so dropdown renders
 
         backend:
           title: Backend Platform
           type: string
+          enum: []  # Placeholder so dropdown renders
 
         database:
           title: Database
           type: string
+          enum: []  # Placeholder so dropdown renders
 
         repoUrl:
           title: Repository Location
